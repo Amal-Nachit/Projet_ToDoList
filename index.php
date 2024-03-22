@@ -231,20 +231,23 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 </script>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://kit.fontawesome.com/0e2d3a094c.js" crossorigin="anonymous"></script>
+<script src="./script.js"></script>
  	<?php
          // Ici on sépare la couche vue du reste de l'application, 
          // on récupère les données plus haut,  et on appelle une vue 
          // avec un include pour les afficher .
          // On pourrait être tentés de mettre aussi la logique métier plus haut dans ce fichier égalemment dans la vue
          // mais c'est anti pattern.
+
          include("./Views/Alltasks.php");
          include("./Views/AddProduct.php") ;
          include("./TaskRegister/TaskRegister.php");
 
     ?>
-<script src="https://cdn.tailwindcss.com"></script>
-<script src="https://kit.fontawesome.com/0e2d3a094c.js" crossorigin="anonymous"></script>
-<script src="./script.js"></script>
+
 </html>
 
 			

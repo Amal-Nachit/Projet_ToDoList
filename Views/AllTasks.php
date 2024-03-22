@@ -1,4 +1,8 @@
 <?php
+namespace AllTasks;
+
+include './Category/Category.php';
+include './Task/Task.php';
 echo"<div>
   <h1 class='  text-red-500 text-3xl text-center pt-4 ml-12'>
                 Votre liste de tâches
@@ -20,7 +24,7 @@ echo"<div>
                             <p class='text-white' > 
                             Description :" . $task->getDESCRIPTION() . "</p>
                                <p class='text-white' > 
-                            catégory :" . $task->getIDCATE() . "</p>
+                            catégory :" . $task->getIDCATEGORY() . "</p>
                             </div>
                             </div>";
                 }
