@@ -43,6 +43,47 @@ class PriorityManager
         // Une fois la requete finie on return le tableau de products
         return $priorities;
     }
-
-
+public function getPriorityByID($id)
+{
+    try {
+        // Préparation de la requête SQL pour sélectionner une catégorie par son ID
+        $stmt = $this->pdo->prepare("SELECT * FROM tdl_priority WHERE ID_PRIORITY = ?");
+        
+        // Exécution de la requête avec l'ID de la catégorie comme paramètre
+        $stmt->execute([$id]);
+        
+        // Récupération de la première ligne retournée par la requête
+        $priority = $stmt->fetch(\PDO::FETCH_ASSOC);
+        
+        // Si une catégorie a été trouvée, retourne l'objet Category
+        if ($priority) {
+            return new Priority($priority);
+        }
+        
+        // Si aucune catégorie n'a été trouvée, retourne null ou lance une exception
+        return null;
+    } catch (\PDOException $e) {
+        // Gestion de l'erreur
+        var_dump($e);
+        // Retourne null en cas d'erreur
+        return null;
+    }
+}
+public function getPriorityByTask($task){
+    $stmt = $this->pdo->prepare("SELECT NAME FROM tdl_priority JOIN tdl_task WHERE tdl_priority.ID_PRIORITY = tdl_task.ID_TASK");
+        
+        // Exécution de la requête avec l'ID de la catégorie comme paramètre
+        $stmt->execute([$task]);
+        
+        // Récupération de la première ligne retournée par la requête
+        $priority = $stmt->fetch(\PDO::FETCH_ASSOC);
+        
+        // Si une catégorie a été trouvée, retourne l'objet Category
+        if ($priority) {
+            return new Priority($priority);
+        }
+        
+        // Si aucune catégorie n'a été trouvée, retourne null ou lance une exception
+        return null;
+}
 }

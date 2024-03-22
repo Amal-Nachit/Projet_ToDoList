@@ -1,5 +1,4 @@
 <?php
-session_start();
 use Models\DbConnexion\DbConnexion;
 use Models\User\User;
 use Repositories\UserManager\UserManager;

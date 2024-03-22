@@ -1,6 +1,7 @@
 <?php
 namespace Task;
-
+use PDO;
+use PDOException;
 class Task{
     private $ID_TASK;
     private $TITLE;
@@ -122,4 +123,5 @@ function __construct(array $datas){
 
         return $this;
     }
+   
     }

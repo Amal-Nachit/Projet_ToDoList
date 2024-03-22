@@ -48,4 +48,31 @@ class CategoryManager
     }
 
 
+public function getCategoryByID($id)
+{
+    try {
+        // Préparation de la requête SQL pour sélectionner une catégorie par son ID
+        $stmt = $this->pdo->prepare("SELECT * FROM tdl_category WHERE ID_CATEGORY = ?");
+        
+        // Exécution de la requête avec l'ID de la catégorie comme paramètre
+        $stmt->execute([$id]);
+        
+        // Récupération de la première ligne retournée par la requête
+        $category = $stmt->fetch(\PDO::FETCH_ASSOC);
+        
+        // Si une catégorie a été trouvée, retourne l'objet Category
+        if ($category) {
+            return new Category($category);
+        }
+        
+        // Si aucune catégorie n'a été trouvée, retourne null ou lance une exception
+        return null;
+    } catch (\PDOException $e) {
+        // Gestion de l'erreur
+        var_dump($e);
+        // Retourne null en cas d'erreur
+        return null;
+    }
+}
+    
 }

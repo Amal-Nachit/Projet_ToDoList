@@ -1,4 +1,5 @@
 <?php
+
 include("./autoload.php");
 
 use PriorityManager\PriorityManager;
@@ -47,13 +48,48 @@ $priorities = $priorityManager->getAllPriorities();
 							class="w-full border border-2 border-indigo-300 px-4 py-2 mr-2 rounded-lg
 							focus:outline-none
 							focus:border-indigo-500" id="todo-input"
-							placeholder="Ajouter une nouvelle tâche" required>
+							placeholder="Chercher une tâche" required>
 						<button class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded">
-                         Ajouter
+                         Chercher
                         </button>
 					</div>
-				</form>	
-			<div>
+					    <div class="container mx-auto px-4">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Titre</th>
+                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Date</th>
+                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Priorité</th>
+                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Catégorie</th>
+                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Description</th>
+                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Action</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                <tr>
+                   <td class="px-6 py-4 whitespace-nowrap">
+    				<?php foreach ($tasks as $task): ?>
+       				 <h3 class="text-black"><?php echo $task->getTITLE(); ?></h3>
+    				<?php endforeach; ?>
+					</td>
+
+                    <td class="px-6 py-4 whitespace-nowrap"><?php foreach ($tasks as $task): ?>
+       				 <h3 class="text-black"><?php echo $task->getDATE(); ?></h3>
+    				<?php endforeach; ?></td>
+                    <td class="px-6 py-4 whitespace-nowrap"><?php foreach ($tasks as $task): ?>
+       				 <h3 class="text-black"><?php echo $task->getIDPRIORITY(); ?></h3>
+    				<?php endforeach; ?></td>
+                    <td class="px-6 py-4 whitespace-nowrap"></td>
+                    <td class="px-6 py-4 whitespace-nowrap"><?php foreach ($tasks as $task): ?>
+       				 <h3 class="text-black"><?php echo $task->getDESCRIPTION(); ?></h3>
+    				<?php endforeach; ?></td>
+                    <td>
+                    <button type="button" class="btn btn-secondary" title="Update" onclick="editTask()"><i class="fa-solid fa-pencil text-blue-500"></i></button>
+                    <button type="button" class="btn btn-danger" title="Delete" onclick="deleteTask()"><i class="fa-solid fa-trash text-red-500"></i></button>
+                    </td>
+                </tr>
+            </tbody>  	
+		
 				<ul id="todo-list">
 				</ul>
 			</div>
@@ -101,7 +137,6 @@ $priorities = $priorityManager->getAllPriorities();
                             <select id="priority" name="id_priority" type="text" required class="capitalize block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 indent-3 Priority">
                                 <?php
                                 foreach ($priorities as $priority) {
-
                                     echo "<option class='capitalize' value=" . $priority->getIDPRIORITY() . " >" . $priority->getNAME() . "</option>";
                                 }
                                 ?>
@@ -125,7 +160,7 @@ $priorities = $priorityManager->getAllPriorities();
 
                     <div class="col-span-2">
                         <label for="description" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Description</label>
-                        <textarea id="description" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 Description" placeholder="Votre description ici"></textarea>                    
+                        <textarea id="description" rows="4" name="task-description" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 Description" placeholder="Votre description ici"></textarea>                    
                     </div>
 
                 </div>
@@ -142,35 +177,37 @@ $priorities = $priorityManager->getAllPriorities();
 
 </body>
 	<script>
-		function addTask(task) {
-			const todoList = document.getElementById("todo-list");
-			const li = document.createElement("li");
-			li.className = "border-b border-gray-200 flex items-center justify-between py-4";
-			li.innerHTML = `<label class="flex items-center text-xl font-semibold">
-					<input type="checkbox" class="mr-2 h-6 w-6 ">
-					<span>${task}</span>
-				</label>
-				<div>
-                    <button class="text-blue-500 mr-2 hover:text-blue-700 edit-btn">
-                    <i class="fa-solid fa-pen-to-square"></i>
-                    </button>
-					<button class="text-red-500 hover:text-red-700
-					mr-2 delete-btn"><i class="fa-solid fa-trash"></i></button>
-				</div>
-			`;
-			todoList.appendChild(li);
+function addTask(task) {
+    const todoList = document.getElementById("todo-list");
+    const tbody = document.querySelector("table tbody"); // Sélectionne le <tbody> du tableau
+    const tr = document.createElement("tr"); // Crée un nouvel élément <tr>
 
-			// Add event listener to the checkbox
-			const checkbox = li.querySelector('input[type="checkbox"]');
-			checkbox.addEventListener('change', function () {
-				const taskText = this.nextElementSibling;
-				if (this.checked) {
-					taskText.classList.add('tacheEffectuee');
-				} else {
-					taskText.classList.remove('tacheEffectuee');
-				}
-			});
-		}
+    // Crée les cellules de la ligne pour chaque colonne du tableau
+    const titleCell = document.createElement("td");
+    titleCell.textContent = task.title; // Assurez-vous que 'task' contient une propriété 'title'
+    tr.appendChild(titleCell);
+
+    const dateCell = document.createElement("td");
+    dateCell.textContent = task.date; // Assurez-vous que 'task' contient une propriété 'date'
+    tr.appendChild(dateCell);
+
+    const priorityCell = document.createElement("td");
+    priorityCell.textContent = task.priority; // Assurez-vous que 'task' contient une propriété 'priority'
+    tr.appendChild(priorityCell);
+
+    const categoryCell = document.createElement("td");
+    categoryCell.textContent = task.category; // Assurez-vous que 'task' contient une propriété 'category'
+    tr.appendChild(categoryCell);
+
+    const descriptionCell = document.createElement("td");
+    descriptionCell.textContent = task.description; // Assurez-vous que 'task' contient une propriété 'description'
+    tr.appendChild(descriptionCell);
+
+    // Ajoute le nouvel élément <tr> au <tbody> du tableau
+    tbody.appendChild(tr);
+
+}
+
 
 		// Event listener for form submission
 		document.getElementById("todo-form").addEventListener("submit",
@@ -183,31 +220,6 @@ $priorities = $priorityManager->getAllPriorities();
 					taskInput.value = "";
 				}
 			});
-
-		// Event listener for delete button click
-		document.getElementById("todo-list")
-		.addEventListener("click",
-			function (event) {
-				if (event.target.classList.contains("delete-btn")) {
-					event.target.parentElement.parentElement.remove();
-				}
-			});
-
-		// Event listener for edit button click
-		document.getElementById("todo-list")
-		.addEventListener("click",
-			function (event) {
-				if (event.target.classList.contains("edit-btn")) {
-					const taskText = event.target.
-						parentElement.parentElement.querySelector("span");
-					const newText = 
-						prompt("Entrer nouvelle tâche", taskText.textContent);
-					if (newText !== null) {
-						taskText.textContent = newText.trim();
-					}
-				}
-			});
-
 
 
 
@@ -242,8 +254,6 @@ document.addEventListener('DOMContentLoaded', function() {
          // On pourrait être tentés de mettre aussi la logique métier plus haut dans ce fichier égalemment dans la vue
          // mais c'est anti pattern.
 
-         include("./Views/Alltasks.php");
-         include("./Views/AddProduct.php") ;
          include("./TaskRegister/TaskRegister.php");
 
     ?>
