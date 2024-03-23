@@ -25,32 +25,42 @@ use TaskManager\TaskManager;
 //     }
 
 
-if (isset($_POST)) {
-    $data = file_get_contents("php://input");
 
-    // Décoder les données JSON et convertir en tableau
-    $decodedTask = json_decode($data, true);
+// include('./DbConnexion/DbConnexion.php');
 
-    // Vérifier si $decodedTask est un tableau
-    if (is_array($decodedTask)) {
-        // Si c'est un tableau, crée une nouvelle instance de Task
-        $task = new Task($decodedTask);
+if (isset($_POST["addTask"])) {
+    $taskTitle = $_POST['taskTitle'];
+    $taskDate = $_POST['taskDate'];
+    $idPriority = $_POST['idPriority'];
+    $taskDescription = $_POST['taskDescription'];
 
-        $dbConnexion = new DbConnexion();
-        $taskManager = new TaskManager($dbConnexion);
-
-        if ($taskManager->insertTask($task)) {
-            $_SESSION["id"] = $task->getIDTASK();
-            echo "inserted";
-        } else {
-            echo "Error";
-//         }
-//     } else {
-//         // Gérer le cas où $decodedTask n'est pas un tableau
-//         echo "Error: Les données reçues ne sont pas au format attendu.";
-//     }
-// } else {
-//     echo "Error: Aucune donnée POST reçue.";
-}
+    if(empty($taskTitl || $taskDate || $idPriority)){
+        header('location:index.php?message=Vous devez remplir les champs obligatoires');
+    }else{
+        $query = $taskManager->insertTask($task);   
     }
+    try {
+        $stmt = $conn->prepare("INSERT INTO `tdl_task` (`ID_TASK`, `DATE`, `TITLE`, `ID_PRIORITY`, `DESCRIPTION`) VALUES (NULL, :task-Date, :task-Title, :id_priority, :task-description)");
+
+        $stmt->bindParam(':task-Title', $taskTitle, PDO::PARAM_STR);
+        $stmt->bindParam(':task-Date', $taskDate, PDO::PARAM_INT);
+        $stmt->bindParam(':id_priority', $idPriority, PDO::PARAM_STR);
+        $stmt->bindParam(':task-description', $taskDescription);
+        
+        $stmt->execute();
+
+        echo "
+        <script>
+            alert('Task Added Successfully');
+        </script>
+        ";
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+} else {
+    echo "
+        <script>
+            // alert('Failed to Add Task');
+        </script>
+        ";
 }

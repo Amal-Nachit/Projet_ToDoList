@@ -22,7 +22,7 @@ class UserManager
 
 
         try {
-            $stmt = $this->pdo->query("SELECT * FROM user WHERE email = '$email' AND password = '$hash' ");
+            $stmt = $this->pdo->query("SELECT * FROM tdl_user WHERE EMAIL = '$email' AND password = '$hash' ");
 
             
         } catch (\PDOException $e) {
@@ -63,7 +63,7 @@ class UserManager
         try {
             // Je peux préparer ma requête 
             // ATTENTION à avoir le BON nombre de champs , conformément à la table concernée
-            $stmt = $this->pdo->prepare("INSERT INTO user VALUES(NULL, ?, ?, ?, ?)");
+            $stmt = $this->pdo->prepare("INSERT INTO tdl_user VALUES(NULL, ?, ?, ?, ?)");
             // ICI , je dois faire ATTENTION à passer les éléments dans le même ordre que dans ma table USER
             $stmt->execute([ $user->getFIRSTNAME(),$user->getLASTNAME(), $password, $user->getEMAIL()]);
 
@@ -85,7 +85,7 @@ class UserManager
         $email = $user->getEMAIL();
  
         try {
-            $stmt = $this->pdo->query("SELECT * FROM user WHERE email_user = '$email' ");
+            $stmt = $this->pdo->query("SELECT * FROM tdl_user WHERE EMAIL = '$email' ");
 
         } catch (\PDOException $e) {
             return $e;

@@ -70,7 +70,9 @@ public function getPriorityByID($id)
     }
 }
 public function getPriorityByTask($task){
-    $stmt = $this->pdo->prepare("SELECT NAME FROM tdl_priority JOIN tdl_task WHERE tdl_priority.ID_PRIORITY = tdl_task.ID_TASK");
+    $stmt = $this->pdo->prepare("SELECT NAME FROM tdl_priority WHERE ID_PRIORITY IN (
+        SELECT ID_PRIORITY FROM tdl_task WHERE tdl_task.ID_PRIORITY = tdl_priority.ID_PRIORITY
+    ");
         
         // Exécution de la requête avec l'ID de la catégorie comme paramètre
         $stmt->execute([$task]);

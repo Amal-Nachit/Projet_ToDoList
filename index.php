@@ -30,6 +30,11 @@ $priorities = $priorityManager->getAllPriorities();
 		.tacheEffectuee {
 			text-decoration: line-through;
 		}
+        body{
+            background-image: url('./Medias/background.jpg');
+            background-size: cover;
+            background-repeat: repeat;
+        }
 	</style>
 </head>
 
@@ -53,6 +58,7 @@ $priorities = $priorityManager->getAllPriorities();
                          Chercher
                         </button>
 					</div>
+                </form>
 					    <div class="container mx-auto px-4">
         <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
@@ -79,7 +85,8 @@ $priorities = $priorityManager->getAllPriorities();
                     <td class="px-6 py-4 whitespace-nowrap"><?php foreach ($tasks as $task): ?>
        				 <h3 class="text-black"><?php echo $task->getIDPRIORITY(); ?></h3>
     				<?php endforeach; ?></td>
-                    <td class="px-6 py-4 whitespace-nowrap"></td>
+                  <td class="px-6 py-4 whitespace-nowrap"><?php foreach ($priorityManager as $priority): ?>. <h3 class="text-black"><?php echo $priority->getPriorityByTask(); ?></h3>
+    				<?php endforeach; ?> </td>
                     <td class="px-6 py-4 whitespace-nowrap"><?php foreach ($tasks as $task): ?>
        				 <h3 class="text-black"><?php echo $task->getDESCRIPTION(); ?></h3>
     				<?php endforeach; ?></td>
@@ -93,19 +100,24 @@ $priorities = $priorityManager->getAllPriorities();
 				<ul id="todo-list">
 				</ul>
 			</div>
-		</div>
+        </table>
+        <?php
+        if(isset($_GET['message'])){
+            echo $_GET['message'];
+        }
+        ?>
 	</div>
 
 <!-- Modal toggle -->
-<button data-modal-target="crud-modal" data-modal-toggle="crud-modal" class="fixed bottom-0 right-0 block text-white bg-indigo-300 hover:bg-indigo-600 font-medium rounded-full text-sm px-3 py-2.5 text-center type="button">
+<button data-modal-target="crud-modal" data-modal-toggle="crud-modal" class=" bottom-0 right-0  text-white bg-indigo-300 hover:bg-indigo-600 font-medium rounded-full text-sm px-3 py-2.5 text-center  type="button" >
 <i class="fa-solid fa-plus text-4xl"></i>
 </button>
 
 <!-- Main modal -->
-<div id="crud-modal" tabindex="-1" aria-hidden="true" class="fixed inset-0 flex items-center justify-center z-50 hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full space-y-6 formRegister " action="traitement.php" method="POST" name="addTask">
+<div id="crud-modal" tabindex="-1" aria-hidden="true" class="fixed shadow-lg inset-0 flex items-center justify-center z-50 hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full space-y-6 formRegister " action="/TaskRegister/TaskRegister.php" method="POST" name="addTask">
     <div class="relative p-4 w-full max-w-md max-h-full">
         <!-- Modal content -->
-        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+        <div class="relative bg-white rounded-lg shadow-lg dark:bg-gray-700">
             <!-- Modal header -->
             <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                 <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
@@ -123,18 +135,18 @@ $priorities = $priorityManager->getAllPriorities();
                 <div class="grid gap-4 mb-4 grid-cols-2">
                     <div class="col-span-2">
                         <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Titre de la tâche</label>
-                        <input type="text" name="task-Name" id="name" class="Title bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Donnez un titre à votre tâche" required="">
+                        <input type="text" name="taskName" id="taskName" class="Title bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Donnez un titre à votre tâche" required="">
                     </div>
                     <div class="col-span-2">
                         <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Date de la tâche</label>
-                        <input type="date" name="task-Date" id="date" class="Date bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" required="">
+                        <input type="date" name="taskDate" id="date" class="Date bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" required="">
                     </div>
 					<div class="flex items-center justify-between">
-                            <label for="category" class="block text-sm font-medium leading-6 text-gray-900 mt-2">Priorité</label>
+                            <label for="priority" class="block text-sm font-medium leading-6 text-gray-900 mt-2">Priorité</label>
 
                         </div>
                         <div class="mt-2">
-                            <select id="priority" name="id_priority" type="text" required class="capitalize block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 indent-3 Priority">
+                            <select id="priority" name="idPriority" type="text" required class="capitalize block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 indent-3 Priority">
                                 <?php
                                 foreach ($priorities as $priority) {
                                     echo "<option class='capitalize' value=" . $priority->getIDPRIORITY() . " >" . $priority->getNAME() . "</option>";
@@ -143,24 +155,11 @@ $priorities = $priorityManager->getAllPriorities();
                             </select>
                         </div>
 
-						<div class="flex items-center justify-between">
-                            <label for="category" class="block text-sm font-medium leading-6 text-gray-900 mt-2">Catégorie</label>
-
-                        </div>
-                        <div class="mt-2">
-                            <select id="category" name="id_category" type="text" required class="capitalize block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 indent-3 Category">
-                                <?php
-                                foreach ($categories as $category) {
-
-                                    echo "<option class='capitalize' value=" . $category->getIDCATEGORY() . " >" . $category->getNAME() . "</option>";
-                                }
-                                ?>
-                            </select>
-                        </div>
+						
 
                     <div class="col-span-2">
                         <label for="description" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Description</label>
-                        <textarea id="description" rows="4" name="task-description" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 Description" placeholder="Votre description ici"></textarea>                    
+                        <textarea id="description" rows="4" name="taskDescription" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 Description" placeholder="Votre description ici"></textarea>                    
                     </div>
 
                 </div>
