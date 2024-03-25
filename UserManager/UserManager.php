@@ -55,7 +55,7 @@ class UserManager
 
 
             return $stmt->rowCount() == 1;
-        } catch (\PDOException $e) {e traitement.php
+        } catch (\PDOException $e) {
             return $e ; 
         }
     }
