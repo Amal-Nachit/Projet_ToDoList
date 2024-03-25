@@ -2,7 +2,7 @@
 namespace User;
 
 
-class User{
+class User{    
 
     private $ID_USER;
     private $FIRST_NAME;

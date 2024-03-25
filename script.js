@@ -6,32 +6,25 @@ async function handleRegister() {
   let email = document.querySelector(".email").value;
   let password = document.querySelector(".password").value;
 
-  // On construit un objet dont les clefs ( nom de champs) doivent être identiques à la classe User.
   let user = {
-    firstName_user: firstName,
-    lastName_user: lastName,
-    email_user: email,
-    password_user: password,
+    FIRST_NAME: firstName,
+    LAST_NAME: lastName,
+    EMAIL: email,
+    PASSWORD: password,
   };
 
-  // On crée les paramètres de la requête HTTP qui sera envoyée à PHP
   let params = {
-    // Méthode HTPP Post ( pour que le traitement puisse vérifier avec if(isset($_POST)))
     method: "POST",
-    // On précise toujours le format de la requête HHTP
-    // Ici du json, mais ca pourrait être du form data, du form url encoded , etc...
     headers: {
       "Content-Type": "application/json; charset=utf-8",
     },
-    // Dans le corp de la requêter HTTP, va se trouver la donnée
-    // On va lui passer nos données de l'objet user crée précédement
-
     body: JSON.stringify(user),
   };
 
   fetch("./register.php", params)
     .then((res) => res.text())
     .then((data) => {
+      window.location.href = "./connexion.php";
       handleFetchResponse(data);
     })
     .catch((e) => {
@@ -46,8 +39,91 @@ function handleFetchResponse(data) {
     let toast = document.querySelector(".toast");
     toast.innerText = data;
   } else {
-    let registerForm = document.querySelector(".formRegister");
-    // registerForm.classList.add("hidden");
+    let registerForm = document.querySelector("#connexion");
+    registerForm.classList.add("hidden");
     // Le formulaire disparait
   }
 }
+
+async function handleConnect() {
+  let email = document.querySelector(".email").value;
+  let password = document.querySelector(".password").value;
+
+  let user = {
+    EMAIL: email,
+    PASSWORD: password,
+  };
+
+  let params = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json; charset=utf-8",
+    },
+    body: JSON.stringify(user),
+  };
+
+  fetch("./register.php", params)
+    .then((res) => res.text())
+    .then((data) => {
+      window.location.href = "./index.php";
+      handleFetchResponse(data);
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+}
+
+async function handleRegisterTask() {
+  let taskTitle = document.querySelector(".taskTitle").value;
+  let taskDate = document.querySelector(".taskDate").value;
+  let taskPriority = document.querySelector(".taskPriority").value;
+  // let taskCategory = document.querySelector(".taskCategory").value;
+  let taskDescription = document.querySelector(".taskDescription").value;
+
+  let task = {
+    TITLE: taskTitle,
+    DATE: taskDate,
+    ID_PRIORITY: taskPriority,
+    DESCRIPTION: taskDescription,
+  };
+
+  let params = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json; charset=utf-8",
+    },
+    body: JSON.stringify(task),
+  };
+
+  fetch("./createTask.php", params)
+    .then((res) => res.text())
+    .then((data) => {
+      console.log(data);
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+}
+
+
+// document.querySelector("#taskForm").addEventListener("submit", function(event) {
+//     event.preventDefault(); // Empêche le rechargement de la page
+
+//     // Récupère les données du formulaire
+//     let formData = new FormData(event.target);
+
+//     // Envoie la requête AJAX
+//     fetch('./insertTask.php', {
+//         method: 'POST',
+//         body: formData
+//     })
+//     .then(response => response.json())
+//     .then(data => {
+//         // Ajoute la nouvelle tâche au DOM
+//         let taskList = document.querySelector("#taskList");
+//         let newTask = document.createElement("li");
+//         newTask.textContent = data.title; // Supposons que le serveur renvoie le titre de la tâche
+//         taskList.appendChild(newTask);
+//     })
+//     .catch(error => console.error('Error:', error));
+// });

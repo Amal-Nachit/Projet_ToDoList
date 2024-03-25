@@ -58,7 +58,7 @@ $priorities = $priorityManager->getAllPriorities();
                          Chercher
                         </button>
 					</div>
-                </form>
+                </form>    
 					    <div class="container mx-auto px-4">
         <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
@@ -85,8 +85,9 @@ $priorities = $priorityManager->getAllPriorities();
                     <td class="px-6 py-4 whitespace-nowrap"><?php foreach ($tasks as $task): ?>
        				 <h3 class="text-black"><?php echo $task->getIDPRIORITY(); ?></h3>
     				<?php endforeach; ?></td>
-                  <td class="px-6 py-4 whitespace-nowrap"><?php foreach ($priorityManager as $priority): ?>. <h3 class="text-black"><?php echo $priority->getPriorityByTask(); ?></h3>
-    				<?php endforeach; ?> </td>
+                  <td class="px-6 py-4 whitespace-nowrap"><?php foreach ($categoryManager as $category): ?>. <h3 class="text-black"><?php echo $category->getIDCATEGORY(); ?></h3>
+    				<?php endforeach; ?>
+                </td>
                     <td class="px-6 py-4 whitespace-nowrap"><?php foreach ($tasks as $task): ?>
        				 <h3 class="text-black"><?php echo $task->getDESCRIPTION(); ?></h3>
     				<?php endforeach; ?></td>
@@ -97,8 +98,6 @@ $priorities = $priorityManager->getAllPriorities();
                 </tr>
             </tbody>  	
 		
-				<ul id="todo-list">
-				</ul>
 			</div>
         </table>
         <?php
@@ -114,7 +113,7 @@ $priorities = $priorityManager->getAllPriorities();
 </button>
 
 <!-- Main modal -->
-<div id="crud-modal" tabindex="-1" aria-hidden="true" class="fixed shadow-lg inset-0 flex items-center justify-center z-50 hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full space-y-6 formRegister " action="/TaskRegister/TaskRegister.php" method="POST" name="addTask">
+<div id="crud-modal" tabindex="-1" aria-hidden="true" class="fixed shadow-lg inset-0 flex items-center justify-center z-50 hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full space-y-6 formTaskRegister " action="/createTask.php" method="POST" name="addTask">
     <div class="relative p-4 w-full max-w-md max-h-full">
         <!-- Modal content -->
         <div class="relative bg-white rounded-lg shadow-lg dark:bg-gray-700">
@@ -135,18 +134,17 @@ $priorities = $priorityManager->getAllPriorities();
                 <div class="grid gap-4 mb-4 grid-cols-2">
                     <div class="col-span-2">
                         <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Titre de la tâche</label>
-                        <input type="text" name="taskName" id="taskName" class="Title bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Donnez un titre à votre tâche" required="">
+                        <input type="text" name="taskTitle" id="taskTitle" class="taskTitle bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Donnez un titre à votre tâche" required="">
                     </div>
                     <div class="col-span-2">
                         <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Date de la tâche</label>
-                        <input type="date" name="taskDate" id="date" class="Date bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" required="">
+                        <input type="date" name="taskDate" id="date" class="taskDate bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" required="">
                     </div>
 					<div class="flex items-center justify-between">
                             <label for="priority" class="block text-sm font-medium leading-6 text-gray-900 mt-2">Priorité</label>
-
                         </div>
                         <div class="mt-2">
-                            <select id="priority" name="idPriority" type="text" required class="capitalize block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 indent-3 Priority">
+                            <select id="priority" name="idPriority" type="text" required class="taskPriority capitalize block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 indent-3 ">
                                 <?php
                                 foreach ($priorities as $priority) {
                                     echo "<option class='capitalize' value=" . $priority->getIDPRIORITY() . " >" . $priority->getNAME() . "</option>";
@@ -154,19 +152,47 @@ $priorities = $priorityManager->getAllPriorities();
                                 ?>
                             </select>
                         </div>
+                        <div class="flex items-center justify-between">
+                            <label for="priority" class="block text-sm font-medium leading-6 text-gray-900 mt-2">Catégorie</label>
+                        </div>
+            <div class="category flex flex-wrap">
+                     <?php
+                        $categoriesManager = new CategoryManager($dbConnexion);
+                        $categories = $categoriesManager->getAllCategories();
 
-						
+                        foreach ($categories as $categorie) {
+                        ?>
+                         <div class="px-2.5 w-40">
+                             <input type="checkbox" id="<?= $categorie->getIDCATEGORY()  ?> " value="<?= $categorie->getIDCATEGORY()  ?>" name="checkbox" />
+                             <label for="checkbox" class="categorieCheckbox"><?php if ($categorie->getIDCATEGORY() == 1) {
+                             echo $categorie->getNAME();
+                            } else if ($categorie->getIDCATEGORY() == 2) {
+                            echo $categorie->getNAME() ;
+                            } else if ($categorie->getIDCATEGORY() == 3) {
+                             echo $categorie->getNAME();
+                            } else if ($categorie->getIDCATEGORY() == 4) {
+                            echo $categorie->getNAME();
+                            } ?></label>
+                         </div>
+                     <?php
 
+                        }
+                        ?>
+                 </div>
+
+             </div>
                     <div class="col-span-2">
                         <label for="description" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Description</label>
-                        <textarea id="description" rows="4" name="taskDescription" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 Description" placeholder="Votre description ici"></textarea>                    
+                        <textarea id="description" rows="4" name="taskDescription" class="taskDescription block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Votre description ici"></textarea>                    
                     </div>
 
                 </div>
+                <div class="flex justify-center items-center pb-3">
                 <button onclick="handleRegisterTask()" name="addTask" class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                    <svg class="me-1 -ms-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
+                <svg class="me-1 -ms-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
                     Ajouter la tâche
                 </button>
+                </div>
             </div>
         </div>
     </div>
@@ -178,31 +204,29 @@ $priorities = $priorityManager->getAllPriorities();
 	<script>
 function addTask(task) {
     const todoList = document.getElementById("todo-list");
-    const tbody = document.querySelector("table tbody"); // Sélectionne le <tbody> du tableau
-    const tr = document.createElement("tr"); // Crée un nouvel élément <tr>
+    const tbody = document.querySelector("table tbody"); 
+    const tr = document.createElement("tr"); 
 
-    // Crée les cellules de la ligne pour chaque colonne du tableau
     const titleCell = document.createElement("td");
-    titleCell.textContent = task.title; // Assurez-vous que 'task' contient une propriété 'title'
+    titleCell.textContent = task.title;
     tr.appendChild(titleCell);
 
     const dateCell = document.createElement("td");
-    dateCell.textContent = task.date; // Assurez-vous que 'task' contient une propriété 'date'
+    dateCell.textContent = task.date;
     tr.appendChild(dateCell);
 
     const priorityCell = document.createElement("td");
-    priorityCell.textContent = task.priority; // Assurez-vous que 'task' contient une propriété 'priority'
+    priorityCell.textContent = task.priority; 
     tr.appendChild(priorityCell);
 
     const categoryCell = document.createElement("td");
-    categoryCell.textContent = task.category; // Assurez-vous que 'task' contient une propriété 'category'
+    categoryCell.textContent = task.category; 
     tr.appendChild(categoryCell);
 
     const descriptionCell = document.createElement("td");
-    descriptionCell.textContent = task.description; // Assurez-vous que 'task' contient une propriété 'description'
+    descriptionCell.textContent = task.description; 
     tr.appendChild(descriptionCell);
 
-    // Ajoute le nouvel élément <tr> au <tbody> du tableau
     tbody.appendChild(tr);
 
 }
@@ -224,16 +248,13 @@ function addTask(task) {
 
 		
 document.addEventListener('DOMContentLoaded', function() {
-    // Sélectionnez tous les boutons qui ont l'attribut data-modal-toggle
     const modalToggles = document.querySelectorAll('[data-modal-toggle]');
 
-    // Ajoutez un écouteur d'événements pour chaque bouton
     modalToggles.forEach(function(toggle) {
         toggle.addEventListener('click', function() {
             const modalId = toggle.getAttribute('data-modal-toggle');
             const modal = document.getElementById(modalId);
 
-            // Basculer la visibilité de la modal
             modal.classList.toggle('hidden');
             modal.setAttribute('aria-hidden', modal.classList.contains('hidden'));
         });
@@ -244,6 +265,7 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 <script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/package-json-validator@0.6.3/PJV.min.js"></script>
 <script src="https://kit.fontawesome.com/0e2d3a094c.js" crossorigin="anonymous"></script>
 <script src="./script.js"></script>
  	<?php
@@ -253,7 +275,6 @@ document.addEventListener('DOMContentLoaded', function() {
          // On pourrait être tentés de mettre aussi la logique métier plus haut dans ce fichier égalemment dans la vue
          // mais c'est anti pattern.
 
-         include("./TaskRegister/TaskRegister.php");
 
     ?>
 

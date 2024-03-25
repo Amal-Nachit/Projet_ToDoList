@@ -1,5 +1,4 @@
 <?php
-
 namespace TaskManager;
 
 use CategoryManager\CategoryManager;
@@ -39,16 +38,19 @@ class TaskManager
 
 public function insertTask(Task $objet)
 {
+session_start();
+
+
     $titleTask = $objet->getTITLE();
     $descriptionTask = $objet->getDESCRIPTION();
     $dateTask = $objet->getDATE();
-    $idUser = $objet->getIDUSER();
+    $idUser = 3;
     $idPriority = $objet->getIDPRIORITY();
     
     try {
         // Préparation de la requête SQL pour insérer une nouvelle tâche
         // Supposons que l'ID de la tâche est généré automatiquement par la base de données
-        $stmt = $this->pdo->prepare("INSERT INTO tdl_task (TITLE, DESCRIPTION, DATE, ID_USER, ID_PRIORITY) VALUES (?, ?, ?, ?, ?)");
+        $stmt = $this->pdo->prepare("INSERT INTO tdl_task VALUES (NULL,?, ?, ?, ?, ?)");
         
         // Exécution de la requête avec les valeurs appropriées
         $stmt->execute([$titleTask, $descriptionTask, $dateTask, $idUser, $idPriority]);

@@ -25,9 +25,9 @@
             </div>
         </header>
 
-        <div class="absolute left-1/2 top-1/2 mx-auto max-w-sm -translate-x-1/2 -translate-y-1/2 transform space-y-4 text-center formRegister">
+        <div class="absolute left-1/2 top-1/2 mx-auto max-w-sm -translate-x-1/2 -translate-y-1/2 transform space-y-4 text-center registerForm">
             <!-- register content -->
-            <div x-show="isLoginPage" class="space-y-4">
+            <div x-show="isLoginPage" class="space-y-4" id="inscription">
                 <header class="mb-3 text-2xl font-bold">Créer un profil</header>
                 <div class="w-full rounded-2xl bg-gray-50 px-4 ring-2 ring-gray-200 focus-within:ring-blue-400">
                     <input id="firstName" name="name" required type="text" placeholder="Prénom " class="my-3 w-full border-none bg-transparent outline-none focus:outline-none firstName" />
@@ -47,15 +47,15 @@
             </div>
 
             <!-- login content -->
-            <div x-show="!isLoginPage" class="space-y-4">
+            <div x-show="!isLoginPage" class="space-y-4" id="connexion">
                 <header class="mb-3 text-2xl font-bold">Se connecter</header>
                 <div class="w-full rounded-2xl bg-gray-50 px-4 ring-2 ring-gray-200 focus-within:ring-blue-400">
-                    <input type="text" placeholder="Email" class="my-3 w-full border-none bg-transparent outline-none focus:outline-none" />
+                    <input type="text" placeholder="Email" class="my-3 w-full border-none bg-transparent outline-none focus:outline-none email" />
                 </div>
                 <div class="flex w-full items-center space-x-2 rounded-2xl bg-gray-50 px-4 ring-2 ring-gray-200 focus-within:ring-blue-400">
-                    <input type="password" placeholder="Mot de passe" class="my-3 w-full border-none bg-transparent outline-none" />
+                    <input type="password" placeholder="Mot de passe" class="my-3 w-full border-none bg-transparent outline-none password" />
                 </div>
-                <button class="w-full rounded-2xl border-b-4 border-b-blue-600 bg-blue-500 py-3 font-bold text-white hover:bg-blue-400 active:translate-y-[0.125rem] active:border-b-blue-400">Se connecter</button>
+                <button onclick="handleConnect()" class="w-full rounded-2xl border-b-4 border-b-blue-600 bg-blue-500 py-3 font-bold text-white hover:bg-blue-400 active:translate-y-[0.125rem] active:border-b-blue-400 ">Se connecter</button>
             </div>
 
             <div class="flex items-center space-x-4">
